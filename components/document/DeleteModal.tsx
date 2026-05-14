@@ -16,7 +16,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 export const DeleteModal = ({ roomId }: DeleteModalProps) => {
   const [open, setOpen] = useState(false);
@@ -38,14 +39,9 @@ export const DeleteModal = ({ roomId }: DeleteModalProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="min-w-9 rounded-xl bg-transparent p-2 transition-all">
-          <Image
-            src="/assets/icons/delete.svg"
-            alt="delete"
-            width={20}
-            height={20}
-            className="mt-1"
-          />
+        <Button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-transparent text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-all border border-transparent hover:border-red-500/20 group">
+          <Trash2 size={16} className="group-hover:scale-110 transition-transform" />
+          <span className="text-[10px] font-black uppercase tracking-widest">Delete document</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="shad-dialog">

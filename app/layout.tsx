@@ -15,7 +15,7 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "SyncSlate | Collab On The Go",
+  title: "SyncSlate",
   description: "Your go-to collaborative editor",
 };
 

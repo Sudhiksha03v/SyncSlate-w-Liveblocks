@@ -1,22 +1,20 @@
-import CollaborativeRoom from "@/components/CollaborativeRoom"
+import CollaborativeRoom from "@/components/document/CollaborativeRoom"
 import { getDocument } from "@/lib/actions/room.actions";
 import { getClerkUsers } from "@/lib/actions/user.actions";
+import { getUserColor } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation";
+export const dynamic = 'force-dynamic';
 
 const Document = async ({ params }: { params: { id: string } }) => {
   const resolvedParams = await params; // Await the params
 
   const clerkUser = await currentUser();
-  if (!clerkUser) redirect('/sign-in');
+  if (!clerkUser) return null;
 
-  const { id } = resolvedParams; // Destructure 'id' from the awaited params
+  const { id } = resolvedParams;
 
   const email = clerkUser.emailAddresses[0].emailAddress;
-  if (!email) {
-    // Handle the case where email is not available
-    redirect('/sign-in');
-  }
 
   const room = await getDocument({
     roomId: id,
@@ -28,14 +26,21 @@ const Document = async ({ params }: { params: { id: string } }) => {
   const userIds = Object.keys(room.usersAccesses);
   const users = await getClerkUsers({ userIds });
 
-  const usersData = (users || [])
-    .filter((user): user is User => user !== undefined)
-    .map((user: User) => ({
-      ...user,
-      userType: (room.usersAccesses[user.email] as string[])?.includes('room:write')
-        ? 'editor' as UserType
-        : 'viewer' as UserType
-    }));
+  const usersData: User[] = userIds.map((id) => {
+    const user = users?.find((u) => u?.email === id);
+    const userType = (room.usersAccesses[id] as string[])?.includes('room:write')
+      ? 'editor' as UserType
+      : 'viewer' as UserType;
+
+    return {
+      id: user?.id || id,
+      name: user?.name || id,
+      email: user?.email || id,
+      avatar: user?.avatar || '/assets/icons/user.svg',
+      color: user?.color || getUserColor(id),
+      userType
+    };
+  });
 
   const currentUserType = (room.usersAccesses[clerkUser.emailAddresses[0].emailAddress] as string[])?.includes('room:write') ? 'editor' : 'viewer';
 
