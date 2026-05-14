@@ -37,7 +37,6 @@ body {
 
 .App {
   font-family: sans-serif;
-  text-align: center;
 }
 
 .ltr {
@@ -57,31 +56,30 @@ body {
 }
 
 .editor-inner {
-  background: #0b1527;
+  background: transparent;
   position: relative;
 }
 
 .editor-input {
-  min-height: 400px;
   resize: none;
-  font-size: 15px;
-  caret-color: rgb(5, 5, 5);
+  font-size: 18px;
+  caret-color: #fff;
   position: relative;
   tab-size: 1;
   outline: 0;
-  padding: 40px;
-  caret-color: #444;
+  padding: 80px;
   color: #b4c6ee;
 }
 
 .editor-placeholder {
   color: #b4c6ee;
+  opacity: 0.4;
   overflow: hidden;
   position: absolute;
   text-overflow: ellipsis;
-  top: 40px;
-  left: 40px;
-  font-size: 15px;
+  top: 80px;
+  left: 80px;
+  font-size: 18px;
   user-select: none;
   display: inline-block;
   pointer-events: none;
@@ -324,6 +322,14 @@ pre::-webkit-scrollbar-thumb {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   vertical-align: middle;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .toolbar button.toolbar-item {
@@ -455,4 +461,24 @@ i.h2 {
 
 i.h3 {
   background-image: url(/assets/icons/h3.svg);
+}
+
+i.quote {
+  background-image: url(/assets/icons/journal-text.svg);
+}
+
+i.code {
+  background-image: url(/assets/icons/code.svg);
+}
+
+i.link {
+  background-image: url(/assets/icons/link.svg);
+}
+
+i.ul {
+  background-image: url(/assets/icons/list-ul.svg);
+}
+
+i.ol {
+  background-image: url(/assets/icons/list-ol.svg);
 }

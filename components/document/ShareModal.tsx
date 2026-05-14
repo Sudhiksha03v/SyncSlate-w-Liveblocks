@@ -11,13 +11,15 @@ import {
 
 import { useSelf } from "@liveblocks/react/suspense";
 import React, { useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import UserTypeSelector from "./UserTypeSelector";
 import Collaborator from "./Collaborator";
 import { updateDocumentAccess } from "@/lib/actions/room.actions";
+import { Share2 } from "lucide-react";
+
 
 const ShareModal = ({ roomId, collaborators, creatorId, currentUserType }: ShareDocumentDialogProps) => {
   const user = useSelf();
@@ -31,32 +33,32 @@ const ShareModal = ({ roomId, collaborators, creatorId, currentUserType }: Share
   const shareDocumentHandler = async () => {
     setLoading(true);
 
-    await updateDocumentAccess({
-      roomId,
-      email,
-      userType: userType as UserType,
-      updatedBy: user.info,
-    });
+    try {
+      await updateDocumentAccess({
+        roomId,
+        email,
+        userType: userType as UserType,
+        updatedBy: user.info,
+      });
 
-    setLoading(false);
+      setEmail(""); // Clear input on success
+    } catch (error) {
+      console.error("Failed to share document:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {/* Wrapping Button with `asChild` ensures no nesting */}
-        <div>
-          <Button className="gradient-blue flex h-9 gap-1 px-4" disabled={currentUserType !== "editor"}>
-            <Image
-              src="/assets/icons/share.svg"
-              alt="share"
-              width={20}
-              height={20}
-              className="min-w-4 md:size-5"
-            />
-            <p className="mr-1 hidden sm:block">Share</p>
-          </Button>
-        </div>
+        <Button 
+          className="gradient-blue h-9 px-5 rounded-full flex items-center gap-2 shadow-[0_4px_20px_rgba(59,130,246,0.3)] hover:shadow-[0_6px_25px_rgba(59,130,246,0.5)] transition-all active:scale-95" 
+          disabled={currentUserType !== "editor"}
+        >
+          <Share2 size={16} />
+          <p className="text-xs font-black uppercase tracking-widest hidden sm:block">Share</p>
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="shad-dialog">

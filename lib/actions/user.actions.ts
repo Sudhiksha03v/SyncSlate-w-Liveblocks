@@ -1,7 +1,7 @@
 'use server';
 
 import { clerkClient } from "@clerk/nextjs/server";
-import { parseStringify } from "../utils";
+import { getUserColor, parseStringify } from "../utils";
 import { liveblocks } from "../liveblocks";
 
 // Export the ClerkUser interface so it can be imported in other files
@@ -29,12 +29,12 @@ export const getClerkUsers = async ({ userIds }: { userIds: string[] }) => {
       name: `${user.firstName} ${user.lastName}`,
       email: user.emailAddresses[0]?.emailAddress || "", // Ensure safety with optional chaining
       avatar: user.imageUrl,
+      color: getUserColor(user.id),
     }));
 
-    // Sorting users based on userIds
     const sortedUsers = userIds.map((email) =>
       users.find((user) => user.email === email)
-    );
+    ).filter(Boolean);
 
     return parseStringify(sortedUsers);
   } catch (error) {

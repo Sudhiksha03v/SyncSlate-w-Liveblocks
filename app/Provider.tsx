@@ -1,6 +1,6 @@
 'use client';
 
-import Loader from '@/components/Loader';
+import Loader from '@/components/shared/Loader';
 import { getDocumentUsers, getClerkUsers } from '@/lib/actions/user.actions';
 import { useUser } from '@clerk/nextjs';
 import { ClientSideSuspense, LiveblocksProvider } from '@liveblocks/react/suspense';
@@ -27,7 +27,7 @@ const Provider = ({ children }: { children: ReactNode }) => {
         const clerkUsers = await getClerkUsers({ userIds });
 
         return (clerkUsers || [])
-          .filter((user): user is User => user !== undefined)
+          .filter((user): user is User => Boolean(user))
           .map((user) => ({
             id: user.id,
             name: user.name || 'Unknown',
